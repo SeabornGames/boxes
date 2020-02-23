@@ -162,6 +162,6 @@ The columns within this table are:
 
 Stairs:
 -------
-The room name STAIRS is reseverd for specifying stairs.
+The room name STAIRS is reserved for specifying stairs.
 
 

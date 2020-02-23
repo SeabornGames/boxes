@@ -79,7 +79,7 @@ setup(
     author_email='florian@festi.info',
     url='https://github.com/florianfesti/boxes',
     packages=find_packages(),
-    install_requires=['cairocffi==0.8.0', 'markdown'],
+    install_requires=['cairocffi==0.8.0', 'markdown', "seaborn_table"],
     scripts=['scripts/boxes', 'scripts/boxesserver'],
     cmdclass={
         'build_py': CustomBuildExtCommand,
@@ -95,4 +95,4 @@ setup(
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Computer Aided Design",
     ],
-    keywords=["boxes", "box", "generator", "svg", "laser cutter"], )
+    keywords=["boxes", "box", "generator", "svg", "laser cutter", "glowforge"], )

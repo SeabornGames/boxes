@@ -14,3 +14,4 @@ boxes.egg-info/
 .idea
 documentation/src/generators.inc
 *.ipynb_checkpoints
+_backup/*

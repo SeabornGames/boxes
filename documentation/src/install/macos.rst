@@ -30,7 +30,7 @@ General
 
    .. code::
 
-      pip3 install pycairo cairocffi Markdown lxml
+      pip3 install pycairo cairocffi Markdown lxml seaborn_table
 
 4. Download Boxes.py via Git:
 

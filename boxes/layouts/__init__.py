@@ -38,7 +38,7 @@ def getAllLayouts():
             if v is boxes.Boxes:
                 continue
             if (inspect.isclass(v) and issubclass(v, boxes.Boxes) and
-                        v.__name__[0] != '_'):
+                    v.__name__[0] != '_'):
                 layouts[modname + '.' + v.__name__] = v
     return layouts
 

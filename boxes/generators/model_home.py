@@ -88,3 +88,19 @@ class UnevenHeightBox(Boxes):
 
 
 
+
+
+
+    # parser.add_argument('--wall-height', type=float, default=10.0,
+    #                     help='default height of the walls when creating the'
+    #                          ' wall file.')
+    # parser.add_argument('--filter-room', '-r', nargs='+',
+    #                     help='If specified it will only output the given rooms')
+    # parser.add_argument('--exclude-room', nargs='+',
+    #                     help='If specified will exclude these rooms')
+
+
+--door-height
+--window-height1
+--window-height2
+
