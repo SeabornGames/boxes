@@ -1,2 +1,2 @@
 from .diagram import Diagram
-from .wall import WallTable
+from .wall_table import WallTable

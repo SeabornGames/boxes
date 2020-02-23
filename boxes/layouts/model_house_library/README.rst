@@ -73,17 +73,20 @@ Diagram Helper functions:
 2. Cleanup: It is tedious to put corners and intersects walls, so the layout
             script will update the diagram file to clean it up.
 
-3. Ruler:   The --ruler option will add ruler numbers to the top and left side
+3. Ruler:   The --ruler flag will add ruler numbers to the top and left side
             of the diagram file.
 
-4. Checker: The --checker option will add background checker board so you can
+4. Checker: The --checker flag will add background checker board so you can
             see the feet and ten feet marks.
 
-5. Debug:   The command --highlight-room, --remove-objects, --remove-names are
+5. Debug:   The arguments --highlight-room, --remove-objects, --remove-names are
             generally done for debug purposes.
 
 6. Backup:  Since the layout will be modify your existing diagram file a backup
             will be generated with the same name *.bck
+
+7. SqFt:    The --sqft flag will print a list of all rooms and square feet and
+            a total number of square feet.
 
 7. Output:  The diagram file will automatically be converted to a ``Wall File``
             to be sent to the generator.

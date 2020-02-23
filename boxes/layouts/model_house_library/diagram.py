@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from seaborn_table import SeabornTable
 from .cell import (DoorCell, VirtualCell, WindowCell, WallCell,
                    RoomName, ObjectName)
 
@@ -123,6 +123,16 @@ class Diagram:
             self.grid[i] = str(i // 2).rjust(4, ' ') + [' ', '½'][i % 2] + \
                            self.grid[i]
         self.grid = header + self.grid
+
+    def square_footage(self):
+        table = SeabornTable(columns=['Room', 'SQFT'])
+        total = []
+        for room in self.rooms:
+            room.calc_room_dimensions(self.layout, self.width*4, self.height*2)
+            total += room.cells + room.walls
+            table.append([room.name, len(room.cells) / 8])
+        table.append(['TOTAL', len(set(total)) / 8])
+        return table
 
     def __str__(self):
         return '\n'.join(self.grid)
