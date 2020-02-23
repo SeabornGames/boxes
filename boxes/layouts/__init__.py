@@ -22,21 +22,12 @@ class UIGroup:
 
 
 ui_groups = [
-    UIGroup("Box", "Boxes"),
-    UIGroup("FlexBox", "Boxes with flex"),
-    UIGroup("Tray", "Trays and Drawer Inserts"),
-    UIGroup("Shelf", "Shelves"),
-    UIGroup("SlatWall"),
-    UIGroup("Part", "Parts and Samples"),
-    UIGroup("Misc"),
-    UIGroup("Unstable",
-            description="Generators are still untested or need manual adjustment to be useful."),
     UIGroup("Layout", description="Generators that need a layout input file")
 ]
 
 
-def getAllBoxGenerators():
-    generators = {}
+def getAllLayouts():
+    layouts = {}
     for importer, modname, ispkg in pkgutil.walk_packages(
             path=__path__,
             prefix=__name__ + '.'):
@@ -48,16 +39,16 @@ def getAllBoxGenerators():
                 continue
             if (inspect.isclass(v) and issubclass(v, boxes.Boxes) and
                         v.__name__[0] != '_'):
-                generators[modname + '.' + v.__name__] = v
-    return generators
+                layouts[modname + '.' + v.__name__] = v
+    return layouts
 
 
-def getAllGeneratorModules():
-    generators = {}
+def getAllLayoutModules():
+    layouts = {}
     for importer, modname, ispkg in pkgutil.walk_packages(
             path=__path__,
             prefix=__name__ + '.',
             onerror=lambda x: None):
         module = importlib.import_module(modname)
-        generators[modname.split('.')[-1]] = module
-    return generators
+        layouts[modname.split('.')[-1]] = module
+    return layouts

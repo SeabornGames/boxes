@@ -10,10 +10,21 @@ User interfaces allow users to render the different generators. They
 handle the parameters of Generators and convert them to a readable
 form. The user interfaces are located in `scripts/`. Currently there is
 
+* scripts/layouts -- the command line interface
 * scripts/boxes -- the command line interface
 * scripts/boxesserver -- the web interface
 * scripts/boxes2inx -- generates Inkscape extensions
 * scripts/boxes_example.ipynb -- Jupyter notebook
+
+
+Layouts
+.......
+
+A layout is script for creating/updating layout input files for generators that
+need complex instructions.  Each layout will always have a one to one
+relationship with a generator of the same name.  The idea being the user will
+run a layout script manipulate the layout file and then run the generator with
+the layout file as an input.
 
 
 Generators

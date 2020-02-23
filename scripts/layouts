@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""layouts.py
+
+Generate text file for inputs to the boxes script.
+
+Usage:
+  layouts <layout> [<args>...]
+  layouts --list
+  layouts <layout> (-h | --help)
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+  --list        List available layouts.
+"""
+
+from __future__ import print_function
+import sys
+import os
+from pkg_resources import get_distribution
+
+try:
+    import boxes
+except ImportError:
+    sys.path.append(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+    import boxes
+
+import boxes.layouts
+
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1].startswith("--id="):
+        del sys.argv[1]
+    if len(sys.argv) == 1:
+        print_usage()
+    elif sys.argv[1] == '--list':
+        list_grouped_layouts()
+    else:
+        name = sys.argv[1].lower()
+        if name.startswith("--layout="):
+            name = name[12:]
+        run_layout(name, sys.argv[2:])
+
+
+def print_usage():
+    print(__doc__)
+
+
+def list_grouped_layouts():
+    print('Available layouts:')
+    for group in layout_groups():
+        print('\n' + group.title)
+        if group.description:
+            print('\n%s\n' % group.description)
+        else:
+            print()
+        for box in group.layouts:
+            print(' *  {}  -  {}'.format(box.__name__, box.__doc__ or ''))
+
+
+def run_layout(name, args):
+    layouts = layouts_by_name()
+    lower_name = name.lower()
+
+    if lower_name in layouts.keys():
+        layout = layouts[lower_name]()
+        box.parseArgs(args)
+        box.open()
+        box.render()
+        box.close()
+    else:
+        msg = ('Unknown layout \'{}\'. Use boxes --list to get a list of '
+               'available commands.\n').format(name)
+        sys.stderr.write(msg)
+
+
+def layout_groups():
+    layouts = layouts_by_name()
+    return group_layouts(layouts)
+
+
+def group_layouts(layouts):
+    groups = boxes.layouts.ui_groups
+    groups_by_name = boxes.layouts.ui_groups_by_name
+
+    for name, layout in layouts.items():
+        group_for_layout = groups_by_name.get(layout.ui_group,
+                                              groups_by_name['Misc'])
+        group_for_layout.add(layout)
+
+    return groups
+
+
+def layouts_by_name():
+    all_layouts = boxes.layouts.getAllLayouts()
+
+    return {
+        name.split('.')[-1].lower(): layout
+        for name, layout in all_layouts.items()
+    }
+
+
+if __name__ == '__main__':
+    main()

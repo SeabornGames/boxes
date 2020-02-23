@@ -6,8 +6,7 @@ Generate stencils for wooden boxes.
 Usage:
   boxes <generator> [<args>...]
   boxes --list
-  boxes (-h | --help)
-  boxes --version
+  boxes <generator> (-h | --help)
 
 Options:
   -h --help     Show this screen.
