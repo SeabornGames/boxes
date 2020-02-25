@@ -24,23 +24,30 @@ class UnevenHeightBox(Boxes):
 
     def __init__(self):
         Boxes.__init__(self)
-        self.addSettingsArgs(edges.FingerJointSettings)
-        self.buildArgParser("x", "y", "outside", bottom_edge="F")
-        self.argparser.add_argument(
-            "--height0", action="store", type=float, default=50,
-            help="height of the front left corner in mm")
-        self.argparser.add_argument(
-            "--height1", action="store", type=float, default=50,
-            help="height of the front right corner in mm")
-        self.argparser.add_argument(
-            "--height2", action="store", type=float, default=100,
-            help="height of the right back corner in mm")
-        self.argparser.add_argument(
-            "--height3", action="store", type=float, default=100,
-            help="height of the left back corner in mm")
-        self.argparser.add_argument(
-            "--lid", action="store", type=boolarg, default=False,
-            help="add a lid (works best with high corners opposing each other)")
+        self.addSettingsArgs(boxes.edges.FingerJointSettings)
+        self.addSettingsArgs(boxes.edges.FlexSettings)
+        self.buildArtParser("diagram_file", "wall_file",
+                            "wall_height", "window_bottom", "window_top",
+                            "door", "filter_room", "exclude_room")
+        self.argparser.add_argument('--diagram-file', required=True,
+                                    help='path to the diagram file')
+        self.argparser.add_argument('--wall-file', help='path to the wall file')
+        self.argparser.add_argument('--wall-height', type=float, default=10.0,
+                                    help='default height of the walls')
+        self.argparser.add_argument('--window-bottom', type=float, default=2,
+                                    help='default height of the bottom of the'
+                                         ' windows')
+        self.argparser.add_argument('--window-top', type=float, default=7,
+                                    help='default height of the top of the'
+                                         ' windows')
+        self.argparser.add_argument('--door', type=float, default=9,
+                                    help='default height of the doors')
+        self.argparser.add_argument('--filter-room', default=None, nargs='+',
+                                    help='Only generate walls and floors for'
+                                         ' these rooms.')
+        self.argparser.add_argument('--exclude-room', default=None, nargs='+',
+                                    help='Exclude thse rooms from generating'
+                                         ' walls and floors.')
 
     def render(self):
 
@@ -72,7 +79,8 @@ class UnevenHeightBox(Boxes):
                 lidheights = [maxh-h for h in heights]
                 h0, h1, h2, h3 = lidheights
                 lidheights += lidheights
-                edges = ["E" if (lidheights[i] == 0.0 and lidheights[i+1] == 0.0) else "f" for i in range(4)]
+                edges = ["E" if (lidheights[i] == 0.0 and lidheights[i+1] == 0.0) else "f"
+                         for i in range(4)]
                 self.rectangularWall(x, y, edges, move="up")
 
         if self.lid:
@@ -85,22 +93,3 @@ class UnevenHeightBox(Boxes):
                       (" only" if h2 == h1 == 0.0 else ""))
             self.trapezoidWall(x, h1, h0, "FFeF", move="right" +
                       (" only" if h1 == h0 == 0.0 else ""))
-
-
-
-
-
-
-    # parser.add_argument('--wall-height', type=float, default=10.0,
-    #                     help='default height of the walls when creating the'
-    #                          ' wall file.')
-    # parser.add_argument('--filter-room', '-r', nargs='+',
-    #                     help='If specified it will only output the given rooms')
-    # parser.add_argument('--exclude-room', nargs='+',
-    #                     help='If specified will exclude these rooms')
-
-
---door-height
---window-height1
---window-height2
-

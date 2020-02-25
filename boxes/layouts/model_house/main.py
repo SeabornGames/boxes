@@ -3,7 +3,9 @@ import os
 import sys
 from argparse import ArgumentParser
 from shutil import copyfile
-from .model_house_library import Diagram, WallTable
+
+from .diagram import Diagram
+from .wall_table import WallTable
 
 
 def main(cli_args=sys.argv[1:]):
@@ -120,7 +122,3 @@ def backup_files(files, backup_folder):
     for file in files:
         if backup_folder and os.path.exists(file):
             copyfile(file, os.path.join(backup_folder, os.path.basename(file)))
-
-
-if __name__ == '__main__':
-    main()

@@ -11,18 +11,18 @@ class UIGroup:
         self.name = name
         self.title = title or name
         self.description = description
-        self.generators = []
+        self.layouts = []
         # register
         ui_groups_by_name[name] = self
 
     def add(self, box):
-        self.generators.append(box)
-        self.generators.sort(
+        self.layouts.append(box)
+        self.layouts.sort(
             key=lambda b: getattr(b, '__name__', None) or b.__class__.__name__)
 
 
 ui_groups = [
-    UIGroup("Layout", description="Generators that need a layout input file")
+    UIGroup("Layout", description="Layouts to create a layout input file")
 ]
 
 
@@ -32,9 +32,12 @@ def getAllLayouts():
             path=__path__,
             prefix=__name__ + '.'):
         module = importlib.import_module(modname)
+        if module.__name__.count('.') != 2:
+            continue
         if module.__name__.split('.')[-1].startswith("_"):
             continue
         for k, v in module.__dict__.items():
+            print(f"modname: {modname} k: {k}  v:{v}")
             if v is boxes.Boxes:
                 continue
             if (inspect.isclass(v) and issubclass(v, boxes.Boxes) and
