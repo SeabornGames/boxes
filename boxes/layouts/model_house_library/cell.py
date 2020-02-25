@@ -8,7 +8,7 @@ class Cell:
         self.y = y
 
     def __repr__(self):
-        return '%s(%r, %r, %r)' % (self.__class__.__name__,
+        return '%s<%r, %r, %r>' % (self.__class__.__name__,
                                    self.c, self.x, self.y)
 
     def __str__(self):
