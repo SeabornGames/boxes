@@ -4,8 +4,8 @@ import sys
 from argparse import ArgumentParser
 from shutil import copyfile
 
-from .diagram import Diagram
-from .wall_table import WallTable
+from boxes.layouts.model_house.diagram import Diagram
+from boxes.layouts.model_house.wall_table import WallTable
 
 
 def main(cli_args=sys.argv[1:]):
@@ -13,7 +13,6 @@ def main(cli_args=sys.argv[1:]):
     backup_files([args.diagram_file, args.wall_file], args.backup_folder)
 
     diagram = Diagram(args.input_file, args.checker, args.width, args.height)
-
     if args.remove_objects:
         diagram.remove_objects()
 
@@ -50,7 +49,7 @@ def parse_args(cli_args):
                                         ' as inputs to the mode_home generator')
     parser.add_argument('--input-file', '-i', default=None,
                         help='path to the input diagram file')
-    parser.add_argument('--diagram-file', '-d',
+    parser.add_argument('--diagram-file', '-d', required=True,
                         help='path to the output the diagram-file which'
                              ' defaults to the input file')
     parser.add_argument('--wall-file', '-w', default='wall_height.md',
@@ -120,3 +119,7 @@ def backup_files(files, backup_folder):
     for file in files:
         if backup_folder and os.path.exists(file):
             copyfile(file, os.path.join(backup_folder, os.path.basename(file)))
+
+
+if __name__ == '__main__':
+    main()
