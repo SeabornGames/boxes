@@ -36,13 +36,8 @@ def getAllLayouts():
             continue
         if module.__name__.split('.')[-1].startswith("_"):
             continue
-        for k, v in module.__dict__.items():
-            print(f"modname: {modname} k: {k}  v:{v}")
-            if v is boxes.Boxes:
-                continue
-            if (inspect.isclass(v) and issubclass(v, boxes.Boxes) and
-                    v.__name__[0] != '_'):
-                layouts[modname + '.' + v.__name__] = v
+        if getattr(module, 'main', None):
+            layouts[modname.split('.')[-1]] = module
     return layouts
 
 

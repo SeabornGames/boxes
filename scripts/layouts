@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# TODO this has not been tested
 """layouts.py
 
 Generate text file for inputs to the boxes script.
@@ -27,7 +28,6 @@ except ImportError:
     import boxes
 
 import boxes.layouts
-
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1].startswith("--id="):
@@ -86,7 +86,7 @@ def group_layouts(layouts):
 
     for name, layout in layouts.items():
         group_for_layout = groups_by_name.get(layout.ui_group,
-                                              groups_by_name['Misc'])
+                                              groups_by_name['Layout'])
         group_for_layout.add(layout)
 
     return groups

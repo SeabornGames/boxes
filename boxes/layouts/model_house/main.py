@@ -37,8 +37,6 @@ def main(cli_args=sys.argv[1:]):
     if not args.wall_file:
         return
 
-
-
     wall_table = WallTable(wall_file=args.wall_file)
     wall_table.update_wall_file(diagram)
 
