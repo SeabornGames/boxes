@@ -53,7 +53,7 @@ class WallTable:
 
     def extract_horizontal_walls(self, grid, rooms):
         horizontal_cells = [DoorCell.horizontal, VirtualCell.horizontal,
-                          WindowCell.horizontal, WallCell.horizontal]
+                            WindowCell.horizontal, WallCell.horizontal]
         for v in [WallCell.vertical, WindowCell.vertical] + list(
                 VirtualCell.characters):
             grid = grid.replace(v, ' ')
@@ -72,7 +72,7 @@ class WallTable:
                                     symbols=symbols,
                                     horizontal=True)
                         wall_rooms = self.extract_rooms(
-                            x - len(symbols), x, y, y + 1, rooms)
+                            x - len(symbols)+1, x-1, y, y + 1, rooms)
                         if not wall_rooms:
                             print("WARNING: failed to find room for horizontal"
                                   " wall from x: %s to %s and y: %s" %
@@ -108,7 +108,7 @@ class WallTable:
                                     symbols=symbols.strip(),
                                     horizontal=False)
                         wall_rooms = self.extract_rooms(
-                            x, x + 1, y - len(symbols), y, rooms)
+                            x, x + 1, y - len(symbols)+1, y-1, rooms)
                         for i, room in enumerate(wall_rooms):
                             wall[f'room_{i}'] = room
                         walls.append(wall)
@@ -121,8 +121,8 @@ class WallTable:
         # rotate wall counter clockwise
         replacements = {}
         for cls in [WallCell, WindowCell, VirtualCell, DoorCell]:
-            for _old, _new in [('vertical', 'horizontal'),
-                               ('top_left_corner', 'bottom_left_corner'),
+            replacements[cls.vertical] = cls.horizontal + cls.horizontal
+            for _old, _new in [('top_left_corner', 'bottom_left_corner'),
                                ('top_intersect', 'left_intersect'),
                                ('top_right_corner', 'top_left_corner'),
                                ('bottom_left_corner', 'bottom_right_corner'),
@@ -132,6 +132,7 @@ class WallTable:
                                ('right_intersect', 'top_intersect')
                                ]:
                 if getattr(cls, _old, None) and getattr(cls, _new, None):
+
                     replacements[getattr(cls, _old)] = getattr(cls, _new)
 
         return ''.join([replacements.get(s, s) for s in symbols])

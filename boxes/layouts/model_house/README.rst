@@ -162,6 +162,7 @@ The columns within this table are:
     (characters)
     read-only
     This represents the wall as seen in the diagram file.
+    Vertical walls will be rotated counter clockwise.
 
 
 Stairs:
