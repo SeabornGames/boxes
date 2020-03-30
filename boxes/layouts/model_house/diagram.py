@@ -44,12 +44,13 @@ class Diagram:
             grid = fn.read().split('\n')
         if grid[0].startswith('     000000'):  # then strip header:
             grid = [row[5:] for row in grid[3:]]
+
         if self.height is None:
-            self.height = len(grid) // 2
+            self.height = (len(grid)+1) // 2
         else:
             grid = grid[:self.height * 2]
         if self.width is None:
-            self.width = max(*[len(g) for g in grid]) // 4
+            self.width = (max(*[len(g) for g in grid])+3) // 4
         else:
             grid = [g[:self.width * 4] for g in grid]
 

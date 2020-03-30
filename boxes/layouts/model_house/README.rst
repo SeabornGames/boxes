@@ -51,6 +51,7 @@ Example:
  ║     ┆                     tv                    ┆      ║                 ║
  ╚═════╩═══════════════════════════════════════════╩══════╩═════════════════╝
 ```
+* Also see example file in examples/model_house/floor1.txt
 
 Each character represents 3" by 6", so the example below represents 2 foot by
 2 foot room with a 1.5 feet window and a 1 foot door.
