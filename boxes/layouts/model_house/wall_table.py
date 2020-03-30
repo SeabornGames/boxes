@@ -8,8 +8,7 @@ from .cell import VirtualCell, WindowCell, WallCell, DoorCell
 class WallTable:
     WALL_FILE_COLUMNS = ['horizontal', 'status',
                          'height_1', 'height_2', 'window_1', 'window_2', 'door',
-                         'room_0', 'room_1', 'room_2', 'room_3',
-                         'x', 'y', 'symbols']
+                         'room_0', 'room_1', 'x', 'y', 'symbols']
 
     def __init__(self, wall_file, clear=False):
         self.wall_file = wall_file
@@ -29,25 +28,25 @@ class WallTable:
         horizontal = self.extract_horizontal_walls(grid, diagram.rooms)
         vertical = self.extract_vertical_walls(grid, diagram.rooms)
 
-        for row in self.wall_table:
-            row['status'] = 'missing'
+        for _row in self.wall_table:
+            _row['status'] = 'missing'
 
         def update_wall(wall):
             for row in self.wall_table:
-                if (row['status'] == 'missing' and
-                            wall['horizontal'] == row.get('horizontal') and
-                            wall.get('room_0') == row.get('room_0') and
-                            wall.get('room_1') == row.get('room_1') and
-                            wall.get('room_2') == row.get('room_2') and
-                            wall.get('room_3') == row.get('room_3')):
-                    row.update(wall)
-                    row['status'] = 'used'
-                    return True
+                if row['status'] == 'missing':
+                    matches = [k for k in ['horizontal', 'x', 'y', 'room_0',
+                                           'room_1', 'symbols', 'symbols',
+                                           'symbols'] if wall[k] == row.get(k)]
+                    if len(matches) > 5:
+                        row.update(wall)
+                        row['status'] = 'used'
+                        return True
             return False
 
         for wall in horizontal + vertical:
             if not update_wall(wall):
                 self.wall_table.append(dict(status='new', **wall))
+        self.wall_table.sort_by_key(('room_0', 'y', 'x', 'horizontal'))
         self.wall_table.obj_to_file(self.wall_file, align='left',
                                     quote_numbers=False)
 
@@ -102,13 +101,14 @@ class WallTable:
                     symbols += cell
                 if cell not in vertical_cells or x == len(grid[y]):
                     if len(symbols) > 1:
+                        y_start = y - len(symbols) + 1
                         symbols = self.convert_vertical_to_horizontal(symbols)
                         wall = dict(x=x,
-                                    y=y - len(symbols),
+                                    y=y_start,
                                     symbols=symbols.strip(),
                                     horizontal=False)
                         wall_rooms = self.extract_rooms(
-                            x, x + 1, y - len(symbols)+1, y-1, rooms)
+                            x, x + 1, y_start+1, y-1, rooms)
                         for i, room in enumerate(wall_rooms):
                             wall[f'room_{i}'] = room
                         walls.append(wall)
@@ -117,7 +117,8 @@ class WallTable:
                         symbols = ''
         return walls
 
-    def convert_vertical_to_horizontal(self, symbols):
+    @staticmethod
+    def convert_vertical_to_horizontal(symbols):
         # rotate wall counter clockwise
         replacements = {}
         for cls in [WallCell, WindowCell, VirtualCell, DoorCell]:
@@ -148,7 +149,7 @@ class WallTable:
                         return True
             return False
 
-        return [room for room in rooms if room_found(room)]
+        return [room.name for room in rooms if room_found(room)]
 
     def recreate_diagram_file(self, filename):
         walls = [wall for wall in self.wall_table if wall.status != 'missing']

@@ -149,8 +149,8 @@ The columns within this table are:
     (black, red, green, blue, purple)
     This represents the color of the wall within the SVG.
 
-- room_0, room_1, room_2, room_3
-    (name of the rooms the wall touches)
+- room_0, room_1
+    (name of the rooms the wall is between)
     read-only
 
 - x, y
