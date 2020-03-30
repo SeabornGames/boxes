@@ -120,6 +120,10 @@ def parse_args(cli_args):
     if args.wall_file == os.path.basename(args.wall_file):
         args.wall_file = os.path.join(os.path.dirname(args.diagram_file),
                                       args.wall_file)
+    if args.diagram_file == os.path.basename(args.diagram_file):
+        args.diagram_file = os.path.join(os.path.dirname(args.input_file),
+                                         args.diagram_file)
+
     return args
 
 
