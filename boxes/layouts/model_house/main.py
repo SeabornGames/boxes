@@ -36,7 +36,7 @@ def main(cli_args=sys.argv[1:]):
     if not args.wall_file:
         return
 
-    wall_table = WallTable(wall_file=args.wall_file)
+    wall_table = WallTable(wall_file=args.wall_file, clear=args.wall_clear)
     wall_table.update_wall_file(diagram)
 
     if args.recreate_diagram:
@@ -56,6 +56,8 @@ def parse_args(cli_args):
                         help='path to the wall-file which is a seaborn_table'
                              ' file defining the wall, door, and window'
                              ' height')
+    parser.add_argument('--wall-clear', action='store_true', default=False,
+                         help='recreate wall file from scratch')
 
     parser.add_argument('--width', type=int, default=None,
                         help='number of feet per row in the file.  If specified'

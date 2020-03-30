@@ -2,7 +2,7 @@ import os
 import sys
 from seaborn_table import SeabornTable
 
-from .cell import VirtualCell, WindowCell, WallCell
+from .cell import VirtualCell, WindowCell, WallCell, DoorCell
 
 
 class WallTable:
@@ -11,9 +11,9 @@ class WallTable:
                          'room_0', 'room_1', 'room_2', 'room_3',
                          'x', 'y', 'symbols']
 
-    def __init__(self, wall_file):
+    def __init__(self, wall_file, clear=False):
         self.wall_file = wall_file
-        if os.path.exists(wall_file):
+        if os.path.exists(wall_file) and not clear:
             self.wall_table = SeabornTable.file_to_obj(
                 wall_file, columns=self.WALL_FILE_COLUMNS)
         else:
@@ -52,6 +52,8 @@ class WallTable:
                                     quote_numbers=False)
 
     def extract_horizontal_walls(self, grid, rooms):
+        horizontal_cells = [DoorCell.horizontal, VirtualCell.horizontal,
+                          WindowCell.horizontal, WallCell.horizontal]
         for v in [WallCell.vertical, WindowCell.vertical] + list(
                 VirtualCell.characters):
             grid = grid.replace(v, ' ')
@@ -83,6 +85,9 @@ class WallTable:
         return walls
 
     def extract_vertical_walls(self, grid, rooms):
+        vertical_cells = [DoorCell.vertical, VirtualCell.vertical,
+                          WindowCell.vertical, WallCell.vertical]
+
         for h in [WallCell.horizontal,
                   WindowCell.horizontal] + list(VirtualCell.characters):
             grid = grid.replace(h, ' ')
@@ -95,8 +100,9 @@ class WallTable:
                 cell = grid[y][x]
                 if cell != ' ':
                     symbols += cell
-                if cell == ' ' or x == len(grid[y]):
-                    if symbols:
+                if cell not in vertical_cells or x == len(grid[y]):
+                    if len(symbols) > 1:
+                        symbols = self.convert_vertical_to_horizontal(symbols)
                         wall = dict(x=x,
                                     y=y - len(symbols),
                                     symbols=symbols.strip(),
@@ -106,8 +112,29 @@ class WallTable:
                         for i, room in enumerate(wall_rooms):
                             wall[f'room_{i}'] = room
                         walls.append(wall)
-                    symbols = ''
+                        symbols = ''
+                    elif cell == ' ':
+                        symbols = ''
         return walls
+
+    def convert_vertical_to_horizontal(self, symbols):
+        # rotate wall counter clockwise
+        replacements = {}
+        for cls in [WallCell, WindowCell, VirtualCell, DoorCell]:
+            for _old, _new in [('vertical', 'horizontal'),
+                               ('top_left_corner', 'bottom_left_corner'),
+                               ('top_intersect', 'left_intersect'),
+                               ('top_right_corner', 'top_left_corner'),
+                               ('bottom_left_corner', 'bottom_right_corner'),
+                               ('bottom_intersect', 'right_intersect'),
+                               ('bottom_right_corner', 'top_right_corner'),
+                               ('left_intersect', 'bottom_intersect'),
+                               ('right_intersect', 'top_intersect')
+                               ]:
+                if getattr(cls, _old, None) and getattr(cls, _new, None):
+                    replacements[getattr(cls, _old)] = getattr(cls, _new)
+
+        return ''.join([replacements.get(s, s) for s in symbols])
 
     @staticmethod
     def extract_rooms(x_start, x_end, y_start, y_end, rooms):

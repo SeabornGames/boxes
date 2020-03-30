@@ -94,11 +94,11 @@ class ObjectName(RoomName):
 
 class DoorCell(Cell):
     horizontal = '▤'
-    internal = '█'
-    left_intersect = '█'
-    right_intersect = '█'
-    top_intersect = '█'
-    bottom_intersect = '█'
+    internal = '⏹'
+    left_intersect = '⏹'
+    right_intersect = '⏹'
+    top_intersect = '⏹'
+    bottom_intersect = '⏹'
     vertical = '█'
     characters = (horizontal + internal + left_intersect + right_intersect +
                   top_intersect + bottom_intersect + vertical + vertical)
