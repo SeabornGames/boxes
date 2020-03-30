@@ -99,7 +99,7 @@ class DoorCell(Cell):
     right_intersect = '█'
     top_intersect = '█'
     bottom_intersect = '█'
-    vertical = '╫'
+    vertical = '█'
     characters = (horizontal + internal + left_intersect + right_intersect +
                   top_intersect + bottom_intersect + vertical + vertical)
 

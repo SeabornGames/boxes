@@ -116,6 +116,10 @@ def parse_args(cli_args):
             args.height = 400
         if args.width is None:
             args.width = 200
+
+    if args.wall_file == os.path.basename(args.wall_file):
+        args.wall_file = os.path.join(os.path.dirname(args.diagram_file),
+                                      args.wall_file)
     return args
 
 
