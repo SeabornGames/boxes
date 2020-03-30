@@ -34,9 +34,11 @@ class WallTable:
         def update_wall(wall):
             for row in self.wall_table:
                 if row['status'] == 'missing':
+                    print(wall)
                     matches = [k for k in ['horizontal', 'x', 'y', 'room_0',
                                            'room_1', 'symbols', 'symbols',
-                                           'symbols'] if wall[k] == row.get(k)]
+                                           'symbols']
+                               if wall.get(k) == row.get(k)]
                     if len(matches) > 5:
                         row.update(wall)
                         row['status'] = 'used'
