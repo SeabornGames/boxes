@@ -17,7 +17,7 @@
 from boxes import *
 
 
-class UnevenHeightBox(Boxes):
+class ModelHome(Boxes):
     """Model of a home from a layout file"""
 
     ui_group = "Layout"
@@ -28,10 +28,15 @@ class UnevenHeightBox(Boxes):
         self.addSettingsArgs(boxes.edges.FlexSettings)
         self.buildArtParser("diagram_file", "wall_file",
                             "wall_height", "window_bottom", "window_top",
-                            "door", "filter_room", "exclude_room")
-        self.argparser.add_argument('--diagram-file', required=True,
-                                    help='path to the diagram file')
-        self.argparser.add_argument('--wall-file', help='path to the wall file')
+                            "door", "filter_room", "exclude_room", "scale")
+        self.argparser.add_argument('--diagram-file', default=None,
+                                    help='Path to the diagram file.  If this'
+                                         ' file is not provided then'
+                                         ' floors will not be generated.')
+        self.argparser.add_argument('--wall-file', default=None,
+                                    help='Path to the wall file.  If this'
+                                         ' file is not provided then'
+                                         ' walls will not be generated.')
         self.argparser.add_argument('--wall-height', type=float, default=10.0,
                                     help='default height of the walls')
         self.argparser.add_argument('--window-bottom', type=float, default=2,
@@ -46,8 +51,11 @@ class UnevenHeightBox(Boxes):
                                     help='Only generate walls and floors for'
                                          ' these rooms.')
         self.argparser.add_argument('--exclude-room', default=None, nargs='+',
-                                    help='Exclude thse rooms from generating'
+                                    help='Exclude these rooms from generating'
                                          ' walls and floors.')
+        self.argparser.add_argument('--scale', default=0.1, type=float,
+                                    help='number of inches in the model for'
+                                         ' every foot in the diagram.')
 
     def render(self):
 
