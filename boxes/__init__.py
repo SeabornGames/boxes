@@ -32,13 +32,13 @@ from contextlib import contextmanager
 import copy
 from shlex import quote
 
-from boxes import edges
-from boxes import formats
-from boxes import svgutil
-from boxes import gears
-from boxes import pulley
-from boxes import parts
-from boxes.Color  import *
+from . import edges
+from . import formats
+from . import svgutil
+from . import gears
+from . import pulley
+from . import parts
+from .Color import *
 
 ### Helpers
 
